@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 from avatar.settings import (AVATAR_DEFAULT_URL, AVATAR_CACHE_TIMEOUT,
                              AUTO_GENERATE_AVATAR_SIZES, AVATAR_DEFAULT_SIZE)
@@ -14,7 +15,9 @@ def get_cache_key(user_or_username, size, prefix):
     """
     if isinstance(user_or_username, User):
         user_or_username = user_or_username.username
-    return '%s_%s_%s' % (prefix, user_or_username, size)
+    key = '%s_%s_%s' % (prefix, user_or_username, size)
+    return slugify(key)
+
 
 def cache_result(func):
     """
